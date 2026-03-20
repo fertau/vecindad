@@ -1,11 +1,11 @@
 {
   "name": "Vecindad",
   "short_name": "Vecindad",
-  "description": "El marketplace de tu barrio",
+  "description": "El marketplace de tu barrio. Solo vecinos verificados.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FFFFFF",
-  "theme_color": "#FFFFFF",
+  "background_color": "#FCF9F1",
+  "theme_color": "#2E3B70",
   "orientation": "portrait",
   "icons": [
     {

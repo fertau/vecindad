@@ -1,1 +1,82 @@
 @import "tailwindcss";
+
+/* ─── Vecindad Design System Tokens ─────────────────────────────────────────── */
+
+@theme {
+  /* Primary - Confianza */
+  --color-primary: #2E3B70;
+  --color-primary-light: #3D4F8F;
+  --color-primary-dark: #1E2A54;
+
+  /* Secondary - Comunidad */
+  --color-secondary: #00875A;
+  --color-secondary-light: #00A36E;
+  --color-secondary-dark: #006B47;
+
+  /* Background */
+  --color-cream: #FCF9F1;
+  --color-cream-dark: #F5F0E3;
+
+  /* Accents */
+  --color-accent: #BDEDAA;
+  --color-accent-dark: #8FD97A;
+
+  /* WhatsApp */
+  --color-whatsapp: #25D366;
+  --color-whatsapp-dark: #1DA851;
+
+  /* Trust Level Colors */
+  --color-trust-unverified: #9CA3AF;
+  --color-trust-basic: #F59E0B;
+  --color-trust-verified: #2E3B70;
+  --color-trust-trusted: #00875A;
+
+  /* Semantic */
+  --color-danger: #DC2626;
+  --color-danger-light: #FEE2E2;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Font */
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* ─── Base Styles ───────────────────────────────────────────────────────────── */
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-cream);
+  color: var(--color-primary-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Focus Styles ──────────────────────────────────────────────────────────── */
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 3px;
+}
