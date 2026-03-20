@@ -1,0 +1,87 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helpers ────────────────────────────────────────────────────────────
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return request.auth.uid == 'REPLACE_WITH_ADMIN_UID';
+    }
+
+    function isActiveUser() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.status == 'active';
+    }
+
+    function canVouch() {
+      let level = get(/databases/$(database)/documents/users/$(request.auth.uid)).data.trustLevel;
+      return level == 'verified' || level == 'trusted';
+    }
+
+    // ─── Users ──────────────────────────────────────────────────────────────
+
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+
+      match /private/{document} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+    }
+
+    // ─── Listings ───────────────────────────────────────────────────────────
+
+    match /listings/{listingId} {
+      allow read: if isAuthenticated();
+      allow create: if isActiveUser() &&
+                    request.resource.data.sellerId == request.auth.uid;
+      allow update: if (isOwner(resource.data.sellerId) || isAdmin());
+      allow delete: if isOwner(resource.data.sellerId) || isAdmin();
+    }
+
+    // ─── Validations (avales explícitos) ────────────────────────────────────
+
+    match /validations/{validationId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() &&
+                    canVouch() &&
+                    request.resource.data.fromUid == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    // ─── Social Edges ────────────────────────────────────────────────────────
+
+    match /socialEdges/{edgeId} {
+      allow read: if isAuthenticated() &&
+                  (request.auth.uid == resource.data.fromUid ||
+                   request.auth.uid == resource.data.toUid ||
+                   isAdmin());
+      allow create: if isAdmin();
+      allow update, delete: if isAdmin();
+    }
+
+    // ─── Invites ─────────────────────────────────────────────────────────────
+
+    match /invites/{token} {
+      allow read: if isAuthenticated() &&
+                  (request.auth.uid == resource.data.inviterUid ||
+                   isAdmin()) ||
+                  resource.data.status == 'pending';
+      allow create: if isActiveUser() &&
+                    request.resource.data.inviterUid == request.auth.uid;
+      allow update: if isAuthenticated() &&
+                    (request.auth.uid == resource.data.inviterUid || isAdmin());
+      allow delete: if isAdmin();
+    }
+  }
+}
