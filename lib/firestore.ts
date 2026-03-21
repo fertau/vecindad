@@ -1,4 +1,16 @@
-import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore'
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  addDoc,
+  collection,
+  query,
+  where,
+  orderBy,
+  getDocs,
+  serverTimestamp,
+} from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { User, Listing, Validation, Invite } from '@/types'
 
@@ -21,19 +33,28 @@ export async function updateUser(uid: string, data: Partial<User>): Promise<void
 // ─── Listings ───────────────────────────────────────────────────────────────
 
 export async function getListing(id: string): Promise<Listing | null> {
-  throw new Error('Not implemented')
+  const docSnap = await getDoc(doc(db, 'listings', id))
+  if (!docSnap.exists()) return null
+  return { id: docSnap.id, ...docSnap.data() } as Listing
 }
 
 export async function getActiveListings(): Promise<Listing[]> {
-  throw new Error('Not implemented')
+  const q = query(
+    collection(db, 'listings'),
+    where('status', '==', 'active'),
+    orderBy('createdAt', 'desc')
+  )
+  const snapshot = await getDocs(q)
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }) as Listing)
 }
 
-export async function createListing(listing: Listing): Promise<string> {
-  throw new Error('Not implemented')
+export async function createListing(listing: Omit<Listing, 'id'>): Promise<string> {
+  const docRef = await addDoc(collection(db, 'listings'), listing)
+  return docRef.id
 }
 
 export async function updateListing(id: string, data: Partial<Listing>): Promise<void> {
-  throw new Error('Not implemented')
+  await updateDoc(doc(db, 'listings', id), { ...data, updatedAt: serverTimestamp() })
 }
 
 // ─── Validations ────────────────────────────────────────────────────────────
