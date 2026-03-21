@@ -40,6 +40,16 @@ export default function NavBar() {
             >
               Home
             </Link>
+            <Link
+              href="/feed"
+              className={`text-sm uppercase tracking-wider font-semibold transition-colors px-3 py-1 rounded-full ${
+                pathname === '/feed'
+                  ? 'text-primary'
+                  : 'text-on-surface-variant hover:bg-surface-container-highest'
+              }`}
+            >
+              Explorar
+            </Link>
             {isLoggedIn && (
               <Link
                 href="/profile"
@@ -80,7 +90,7 @@ export default function NavBar() {
       {/* ─── Bottom Nav Bar (Mobile Only) ─── */}
       <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface-bright/80 backdrop-blur-xl border-t border-outline-variant/15 shadow-[0_-4px_24px_rgba(28,28,23,0.06)] px-4 pb-6 pt-3 flex justify-around items-center rounded-t-[2rem]">
         <BottomTab href="/" icon="home" label="Home" active={pathname === '/'} />
-        <BottomTab href="/" icon="grid_view" label="Categorias" active={false} />
+        <BottomTab href="/feed" icon="grid_view" label="Explorar" active={pathname === '/feed'} />
         {isLoggedIn ? (
           <>
             <BottomTab href="/publish" icon="notifications" label="Alertas" active={pathname === '/publish'} />

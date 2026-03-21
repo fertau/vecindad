@@ -50,7 +50,7 @@ export default function HomePage() {
                 </Link>
               )}
               <Link
-                href="/"
+                href="/feed"
                 className="bg-surface-container-highest text-on-surface px-10 py-5 rounded-full text-lg font-bold hover:bg-surface-container-high transition-all text-center"
               >
                 Ver listados
@@ -140,10 +140,10 @@ export default function HomePage() {
                 Desde tesoros usados hasta talentos locales, todo a la vuelta de la esquina.
               </p>
             </div>
-            <button className="text-primary font-bold flex items-center gap-2 hover:underline">
+            <Link href="/feed" className="text-primary font-bold flex items-center gap-2 hover:underline">
               Ver todas las publicaciones{' '}
               <span className="material-symbols-outlined">arrow_forward</span>
-            </button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-6 h-auto md:h-[700px]">
@@ -347,8 +347,8 @@ export default function HomePage() {
           <div>
             <h4 className="font-bold text-xl mb-6">Explorar</h4>
             <ul className="space-y-4 text-primary-fixed-dim">
-              <li><Link href="/" className="hover:text-white transition-colors">Marketplace</Link></li>
-              <li><Link href="/" className="hover:text-white transition-colors">Servicios</Link></li>
+              <li><Link href="/feed" className="hover:text-white transition-colors">Marketplace</Link></li>
+              <li><Link href="/feed?cat=services" className="hover:text-white transition-colors">Servicios</Link></li>
               <li><Link href="/" className="hover:text-white transition-colors">Comunidad</Link></li>
               <li><Link href="/" className="hover:text-white transition-colors">Seguridad</Link></li>
             </ul>
