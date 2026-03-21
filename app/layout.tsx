@@ -19,20 +19,24 @@ export default function RootLayout({
     <html lang="es">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <meta name="theme-color" content="#2E3B70" />
+        <meta name="theme-color" content="#162459" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Vecindad" />
         <link rel="manifest" href="/manifest.json" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen">
+      <body className="bg-surface text-on-surface font-sans min-h-screen">
         <AuthProvider>
           <NavBar />
-          <main>{children}</main>
+          <main className="pb-24 md:pb-0">{children}</main>
         </AuthProvider>
       </body>
     </html>

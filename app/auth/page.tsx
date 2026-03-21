@@ -22,14 +22,12 @@ export default function AuthPage() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
-  // Pre-fill name from Google profile
   useEffect(() => {
     if (firebaseUser?.displayName && !name) {
       setName(firebaseUser.displayName)
     }
   }, [firebaseUser?.displayName, name])
 
-  // Redirect if already registered
   useEffect(() => {
     if (!loading && user && !needsRegistration) {
       router.replace('/')
@@ -65,17 +63,8 @@ export default function AuthPage() {
       const now = Timestamp.now()
 
       const verifications: Verification[] = [
-        {
-          method: 'neighborhood_declaration',
-          status: 'pending',
-          createdAt: now,
-        },
-        {
-          method: 'oauth_google',
-          status: 'verified',
-          verifiedAt: now,
-          createdAt: now,
-        },
+        { method: 'neighborhood_declaration', status: 'pending', createdAt: now },
+        { method: 'oauth_google', status: 'verified', verifiedAt: now, createdAt: now },
       ]
 
       const { trustScore, trustLevel } = recomputeTrustFields(verifications, 0)
@@ -101,11 +90,7 @@ export default function AuthPage() {
 
       trackEvent('user_registered', { neighborhood, trustScore })
       trackEvent('oauth_connected', { provider: 'google' })
-      identifyUser(firebaseUser.uid, {
-        name: newUser.name,
-        neighborhood,
-        trustLevel,
-      })
+      identifyUser(firebaseUser.uid, { name: newUser.name, neighborhood, trustLevel })
 
       await refreshUser()
       router.push('/')
@@ -119,38 +104,34 @@ export default function AuthPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      <div className="flex items-center justify-center min-h-[80vh]">
+        <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
-  // Not logged in → show Google button
+  // Not logged in
   if (!firebaseUser) {
     return (
-      <main className="flex flex-col items-center justify-center min-h-[80vh] px-5">
+      <main className="flex flex-col items-center justify-center min-h-[80vh] px-6">
         <div className="w-full max-w-sm text-center">
-          {/* Logo */}
-          <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
-                  fill="#00875A"
-                />
-                <circle cx="12" cy="9" r="2.5" fill="white" />
-              </svg>
-            </div>
+          <div className="w-20 h-20 bg-primary-fixed rounded-full flex items-center justify-center mx-auto mb-8">
+            <span
+              className="material-symbols-outlined text-primary text-4xl"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
+              location_on
+            </span>
           </div>
 
-          <h1 className="text-3xl font-extrabold text-primary mb-2">Vecindad</h1>
-          <p className="text-primary/50 font-medium mb-10">
+          <h1 className="text-4xl font-extrabold text-primary mb-2 tracking-tight">Vecindad</h1>
+          <p className="text-on-surface-variant font-medium mb-12">
             El marketplace de tu barrio
           </p>
 
           <button
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-3 bg-white border border-cream-dark rounded-xl px-4 py-3.5 text-primary font-semibold hover:shadow-md transition-all shadow-sm"
+            className="w-full flex items-center justify-center gap-3 bg-surface-container-lowest text-on-surface px-4 py-4 rounded-full font-bold hover:shadow-md transition-all ghost-border"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
@@ -161,47 +142,39 @@ export default function AuthPage() {
             Ingresar con Google
           </button>
 
-          {error && (
-            <p className="mt-4 text-danger text-sm font-medium">{error}</p>
-          )}
+          {error && <p className="mt-4 text-error text-sm font-medium">{error}</p>}
 
-          <p className="mt-8 text-xs text-primary/30">
-            Solo para vecinos de Nordelta
-          </p>
+          <p className="mt-10 text-xs text-on-surface-variant/50">Solo para vecinos de Nordelta</p>
         </div>
       </main>
     )
   }
 
-  // Logged in but needs registration → show form
+  // Needs registration
   if (needsRegistration) {
     return (
-      <main className="min-h-screen px-5 py-8">
+      <main className="min-h-screen px-6 py-10">
         <div className="w-full max-w-md mx-auto">
-          <h1 className="text-2xl font-extrabold text-primary mb-1">Completa tu perfil</h1>
-          <p className="text-primary/50 mb-8">
+          <h1 className="text-3xl font-extrabold text-primary mb-2 tracking-tight">
+            Completa tu perfil
+          </h1>
+          <p className="text-on-surface-variant mb-10">
             Para usar Vecindad necesitamos saber de que barrio sos.
           </p>
 
-          <form onSubmit={handleRegister} className="space-y-5">
-            <div>
-              <label htmlFor="name" className="block text-sm font-semibold text-primary mb-1.5">
-                Nombre
-              </label>
+          <form onSubmit={handleRegister} className="space-y-6">
+            <FieldGroup label="Nombre" htmlFor="name">
               <input
                 id="name"
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full rounded-xl border border-cream-dark bg-white px-4 py-3 text-primary placeholder:text-primary/30"
+                className="w-full rounded-xl px-4 py-3.5 text-on-surface"
               />
-            </div>
+            </FieldGroup>
 
-            <div>
-              <label htmlFor="whatsapp" className="block text-sm font-semibold text-primary mb-1.5">
-                WhatsApp
-              </label>
+            <FieldGroup label="WhatsApp" htmlFor="whatsapp" hint="Solo numeros, sin +54 ni guiones">
               <input
                 id="whatsapp"
                 type="tel"
@@ -209,21 +182,17 @@ export default function AuthPage() {
                 placeholder="1155667788"
                 value={whatsapp}
                 onChange={(e) => setWhatsapp(e.target.value.replace(/\D/g, ''))}
-                className="w-full rounded-xl border border-cream-dark bg-white px-4 py-3 text-primary placeholder:text-primary/30"
+                className="w-full rounded-xl px-4 py-3.5 text-on-surface placeholder:text-outline"
               />
-              <p className="mt-1.5 text-xs text-primary/30">Solo numeros, sin +54 ni guiones</p>
-            </div>
+            </FieldGroup>
 
-            <div>
-              <label htmlFor="neighborhood" className="block text-sm font-semibold text-primary mb-1.5">
-                Barrio
-              </label>
+            <FieldGroup label="Barrio" htmlFor="neighborhood">
               <select
                 id="neighborhood"
                 required
                 value={neighborhood}
                 onChange={(e) => setNeighborhood(e.target.value as Neighborhood)}
-                className="w-full rounded-xl border border-cream-dark bg-white px-4 py-3 text-primary"
+                className="w-full rounded-xl px-4 py-3.5 text-on-surface"
               >
                 <option value="">Selecciona tu barrio</option>
                 {NEIGHBORHOODS_SORTED.map((key) => (
@@ -232,12 +201,9 @@ export default function AuthPage() {
                   </option>
                 ))}
               </select>
-            </div>
+            </FieldGroup>
 
-            <div>
-              <label htmlFor="lotNumber" className="block text-sm font-semibold text-primary mb-1.5">
-                Lote / Casa
-              </label>
+            <FieldGroup label="Lote / Casa" htmlFor="lotNumber">
               <input
                 id="lotNumber"
                 type="text"
@@ -245,16 +211,16 @@ export default function AuthPage() {
                 placeholder="Lote 42, Casa 7B, etc."
                 value={lotNumber}
                 onChange={(e) => setLotNumber(e.target.value)}
-                className="w-full rounded-xl border border-cream-dark bg-white px-4 py-3 text-primary placeholder:text-primary/30"
+                className="w-full rounded-xl px-4 py-3.5 text-on-surface placeholder:text-outline"
               />
-            </div>
+            </FieldGroup>
 
-            {error && <p className="text-danger text-sm font-medium">{error}</p>}
+            {error && <p className="text-error text-sm font-medium">{error}</p>}
 
             <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-primary text-white font-semibold rounded-xl px-4 py-3.5 hover:bg-primary-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary/20 mt-2"
+              className="w-full bg-signature-gradient text-white font-bold rounded-full px-4 py-4 hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 mt-2"
             >
               {submitting ? 'Registrando...' : 'Completar registro'}
             </button>
@@ -264,10 +230,32 @@ export default function AuthPage() {
     )
   }
 
-  // Logged in with user → redirecting
+  // Redirecting
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+    <div className="flex items-center justify-center min-h-[80vh]">
+      <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+}
+
+function FieldGroup({
+  label,
+  htmlFor,
+  hint,
+  children,
+}: {
+  label: string
+  htmlFor: string
+  hint?: string
+  children: React.ReactNode
+}) {
+  return (
+    <div>
+      <label htmlFor={htmlFor} className="block text-sm font-bold text-on-surface mb-2">
+        {label}
+      </label>
+      {children}
+      {hint && <p className="mt-1.5 text-xs text-on-surface-variant/60">{hint}</p>}
     </div>
   )
 }

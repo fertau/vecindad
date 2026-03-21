@@ -1,70 +1,149 @@
 @import "tailwindcss";
 
-/* ─── Vecindad Design System Tokens ─────────────────────────────────────────── */
+/* ─── Vecindad Design System: "The Digital Town Square" ─────────────────────── */
 
 @theme {
-  /* Primary - Confianza */
-  --color-primary: #2E3B70;
-  --color-primary-light: #3D4F8F;
-  --color-primary-dark: #1E2A54;
+  /* ─── Primary (Deep Indigo — Trust) ─── */
+  --color-primary: #162459;
+  --color-primary-container: #2e3b70;
+  --color-primary-fixed: #dde1ff;
+  --color-primary-fixed-dim: #b8c4ff;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #9aa7e3;
+  --color-on-primary-fixed: #06164b;
+  --color-on-primary-fixed-variant: #374379;
+  --color-inverse-primary: #b8c4ff;
 
-  /* Secondary - Comunidad */
-  --color-secondary: #00875A;
-  --color-secondary-light: #00A36E;
-  --color-secondary-dark: #006B47;
+  /* ─── Secondary (Earthy Green — Community) ─── */
+  --color-secondary: #3f6833;
+  --color-secondary-container: #bdedaa;
+  --color-secondary-fixed: #c0f0ad;
+  --color-secondary-fixed-dim: #a4d393;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #436d37;
+  --color-on-secondary-fixed: #022100;
+  --color-on-secondary-fixed-variant: #28501e;
 
-  /* Background */
-  --color-cream: #FCF9F1;
-  --color-cream-dark: #F5F0E3;
+  /* ─── Tertiary (Warm Earth — Accent) ─── */
+  --color-tertiary: #431e00;
+  --color-tertiary-container: #643000;
+  --color-tertiary-fixed: #ffdcc5;
+  --color-tertiary-fixed-dim: #ffb783;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #fa8e32;
+  --color-on-tertiary-fixed: #301400;
+  --color-on-tertiary-fixed-variant: #713700;
 
-  /* Accents */
-  --color-accent: #BDEDAA;
-  --color-accent-dark: #8FD97A;
+  /* ─── Surfaces (Tonal Layering System) ─── */
+  --color-surface: #fcf9f1;
+  --color-surface-bright: #fcf9f1;
+  --color-surface-dim: #dcdad2;
+  --color-surface-tint: #4e5b92;
+  --color-surface-variant: #e5e2da;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f6f3eb;
+  --color-surface-container: #f1eee6;
+  --color-surface-container-high: #ebe8e0;
+  --color-surface-container-highest: #e5e2da;
 
-  /* WhatsApp */
+  /* ─── On-Surface ─── */
+  --color-on-surface: #1c1c17;
+  --color-on-surface-variant: #45464f;
+  --color-on-background: #1c1c17;
+  --color-inverse-on-surface: #f3f1e9;
+  --color-inverse-surface: #31312b;
+
+  /* ─── Outline ─── */
+  --color-outline: #767680;
+  --color-outline-variant: #c6c5d1;
+
+  /* ─── Error ─── */
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #93000a;
+
+  /* ─── WhatsApp ─── */
   --color-whatsapp: #25D366;
-  --color-whatsapp-dark: #1DA851;
 
-  /* Trust Level Colors */
-  --color-trust-unverified: #9CA3AF;
-  --color-trust-basic: #F59E0B;
-  --color-trust-verified: #2E3B70;
-  --color-trust-trusted: #00875A;
-
-  /* Semantic */
-  --color-danger: #DC2626;
-  --color-danger-light: #FEE2E2;
-
-  /* Border Radius */
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-full: 9999px;
-
-  /* Font */
+  /* ─── Font ─── */
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  /* ─── Border Radius ─── */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+  --radius-full: 9999px;
 }
 
 /* ─── Base Styles ───────────────────────────────────────────────────────────── */
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-cream);
-  color: var(--color-primary-dark);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ─── Focus Styles ──────────────────────────────────────────────────────────── */
+::selection {
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+/* ─── Material Symbols ──────────────────────────────────────────────────────── */
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* ─── Signature Gradients ───────────────────────────────────────────────────── */
+
+.bg-signature-gradient {
+  background: linear-gradient(135deg, #162459 0%, #2e3b70 100%);
+}
+
+.bg-whatsapp-gradient {
+  background: linear-gradient(135deg, #3f6833 0%, #4caf50 100%);
+}
+
+/* ─── Ghost Border Utility ──────────────────────────────────────────────────── */
+
+.ghost-border {
+  box-shadow: 0 0 0 1px rgba(198, 197, 209, 0.15);
+}
+
+/* ─── Input Styles (Design System Spec) ─────────────────────────────────────── */
+
+input,
+select,
+textarea {
+  background-color: var(--color-surface-container-highest);
+  border: none;
+  transition: all 0.2s ease;
+}
 
 input:focus,
 select:focus,
 textarea:focus {
   outline: none;
-  box-shadow: 0 0 0 2px var(--color-primary);
-  border-color: var(--color-primary);
+  background-color: var(--color-surface-container-lowest);
+  box-shadow: 0 0 0 2px rgba(22, 36, 89, 0.2);
 }
+
+/* ─── Ambient Shadow (Whisper-soft) ─────────────────────────────────────────── */
+
+.shadow-ambient {
+  box-shadow: 0 0 24px rgba(28, 28, 23, 0.06);
+}
+
+/* ─── No Scrollbar Utility ──────────────────────────────────────────────────── */
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
 
@@ -77,6 +156,6 @@ textarea:focus {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #D1D5DB;
+  background: var(--color-outline-variant);
   border-radius: 3px;
 }

@@ -8,10 +8,10 @@ import { NEIGHBORHOOD_LABELS } from '@/constants/neighborhoods'
 import { TrustLevel, VerificationMethod } from '@/types'
 
 const TRUST_LEVEL_CONFIG: Record<TrustLevel, { label: string; bg: string; text: string; bar: string }> = {
-  unverified: { label: 'Sin verificar', bg: 'bg-gray-100',       text: 'text-gray-500',       bar: 'bg-gray-400' },
-  basic:      { label: 'Basico',        bg: 'bg-amber-50',       text: 'text-amber-700',      bar: 'bg-amber-400' },
-  verified:   { label: 'Verificado',    bg: 'bg-primary/10',     text: 'text-primary',        bar: 'bg-primary' },
-  trusted:    { label: 'De Confianza',  bg: 'bg-accent/40',      text: 'text-secondary-dark', bar: 'bg-secondary' },
+  unverified: { label: 'Sin verificar', bg: 'bg-surface-container-highest', text: 'text-on-surface-variant', bar: 'bg-outline' },
+  basic:      { label: 'Basico',        bg: 'bg-tertiary-fixed',           text: 'text-on-tertiary-fixed',  bar: 'bg-on-tertiary-container' },
+  verified:   { label: 'Verificado',    bg: 'bg-primary-fixed',            text: 'text-primary',            bar: 'bg-primary' },
+  trusted:    { label: 'De Confianza',  bg: 'bg-secondary-container',      text: 'text-on-secondary-container', bar: 'bg-secondary' },
 }
 
 const VERIFICATION_LABELS: Record<VerificationMethod, string> = {
@@ -37,8 +37,8 @@ export default function ProfilePage() {
 
   if (loading || !user) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      <div className="flex items-center justify-center min-h-[80vh]">
+        <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -51,93 +51,99 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen px-5 py-6">
-      <div className="w-full max-w-md mx-auto space-y-5">
-        {/* Header */}
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 bg-primary rounded-xl flex items-center justify-center flex-shrink-0">
-            <span className="text-xl font-bold text-white">
+    <main className="min-h-screen">
+      {/* Header */}
+      <div className="bg-surface-container-low px-6 py-8">
+        <div className="max-w-md mx-auto flex items-center gap-4">
+          <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0">
+            <span className="text-2xl font-bold text-on-primary">
               {user.name.charAt(0).toUpperCase()}
             </span>
           </div>
           <div>
-            <h1 className="text-xl font-extrabold text-primary">{user.name}</h1>
-            <p className="text-sm text-primary/40">{user.email}</p>
+            <h1 className="text-2xl font-extrabold text-primary tracking-tight">{user.name}</h1>
+            <p className="text-sm text-on-surface-variant">{user.email}</p>
           </div>
         </div>
+      </div>
 
-        {/* Info Card */}
-        <div className="bg-white rounded-xl border border-cream-dark p-5 space-y-3.5 shadow-sm">
-          <InfoRow label="Barrio" value={NEIGHBORHOOD_LABELS[user.neighborhood]} />
-          <InfoRow label="Lote / Casa" value={user.lotNumber} />
-          <InfoRow label="WhatsApp" value={user.whatsapp} />
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-primary/40">Estado</span>
-            <span className={`text-sm font-semibold ${
-              user.status === 'active' ? 'text-secondary' :
-              user.status === 'pending' ? 'text-amber-600' : 'text-danger'
-            }`}>
-              {user.status === 'active' ? 'Activo' : user.status === 'pending' ? 'Pendiente' : 'Suspendido'}
-            </span>
-          </div>
-        </div>
-
-        {/* Trust Card */}
-        <div className="bg-white rounded-xl border border-cream-dark p-5 space-y-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h2 className="font-bold text-primary">Nivel de confianza</h2>
-            <span className={`text-xs font-bold px-3 py-1 rounded-full ${trustConfig.bg} ${trustConfig.text}`}>
-              {trustConfig.label}
-            </span>
-          </div>
-          <div>
-            <div className="flex justify-between text-sm mb-2">
-              <span className="text-primary/40">Trust score</span>
-              <span className="font-bold text-primary">{user.trustScore} / 100</span>
-            </div>
-            <div className="w-full bg-cream-dark rounded-full h-2.5">
-              <div
-                className={`h-2.5 rounded-full transition-all duration-500 ${trustConfig.bar}`}
-                style={{ width: `${user.trustScore}%` }}
-              />
+      <div className="px-6 py-8">
+        <div className="max-w-md mx-auto space-y-6">
+          {/* Info Card */}
+          <div className="bg-surface-container-lowest p-6 rounded-2xl space-y-4">
+            <InfoRow icon="location_on" label="Barrio" value={NEIGHBORHOOD_LABELS[user.neighborhood]} />
+            <InfoRow icon="home" label="Lote / Casa" value={user.lotNumber} />
+            <InfoRow icon="chat" label="WhatsApp" value={user.whatsapp} />
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-on-surface-variant text-xl w-6">badge</span>
+              <span className="text-sm text-on-surface-variant flex-1">Estado</span>
+              <span className={`text-sm font-bold ${
+                user.status === 'active' ? 'text-secondary' :
+                user.status === 'pending' ? 'text-on-tertiary-container' : 'text-error'
+              }`}>
+                {user.status === 'active' ? 'Activo' : user.status === 'pending' ? 'Pendiente' : 'Suspendido'}
+              </span>
             </div>
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-primary/40">Avales recibidos</span>
-            <span className="font-bold text-primary">{user.validationCount}</span>
-          </div>
-        </div>
 
-        {/* Verifications Card */}
-        <div className="bg-white rounded-xl border border-cream-dark p-5 shadow-sm">
-          <h2 className="font-bold text-primary mb-3">Verificaciones</h2>
-          <div className="space-y-2.5">
-            {user.verifications.map((v, i) => (
-              <div key={i} className="flex items-center justify-between text-sm py-1">
-                <span className="text-primary/70">{VERIFICATION_LABELS[v.method]}</span>
-                <VerificationBadge status={v.status} />
+          {/* Trust Card */}
+          <div className="bg-surface-container-lowest p-6 rounded-2xl space-y-5">
+            <div className="flex items-center justify-between">
+              <h2 className="font-bold text-primary text-lg">Nivel de confianza</h2>
+              <span className={`text-xs font-bold px-3 py-1.5 rounded-full ${trustConfig.bg} ${trustConfig.text}`}>
+                {trustConfig.label}
+              </span>
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-2.5">
+                <span className="text-on-surface-variant">Trust score</span>
+                <span className="font-bold text-primary">{user.trustScore} / 100</span>
               </div>
-            ))}
+              <div className="w-full bg-surface-container-high rounded-full h-3">
+                <div
+                  className={`h-3 rounded-full transition-all duration-500 ${trustConfig.bar}`}
+                  style={{ width: `${user.trustScore}%` }}
+                />
+              </div>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-on-surface-variant">Avales recibidos</span>
+              <span className="font-bold text-primary">{user.validationCount}</span>
+            </div>
           </div>
-        </div>
 
-        {/* Sign out */}
-        <button
-          onClick={handleSignOut}
-          className="w-full text-danger font-semibold border border-danger/20 rounded-xl px-4 py-3 hover:bg-danger-light transition-colors"
-        >
-          Cerrar sesion
-        </button>
+          {/* Verifications Card */}
+          <div className="bg-surface-container-lowest p-6 rounded-2xl">
+            <h2 className="font-bold text-primary text-lg mb-4">Verificaciones</h2>
+            <div className="space-y-3">
+              {user.verifications.map((v, i) => (
+                <div key={i} className="flex items-center justify-between py-1">
+                  <span className="text-sm text-on-surface">{VERIFICATION_LABELS[v.method]}</span>
+                  <VerificationBadge status={v.status} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Sign out */}
+          <button
+            onClick={handleSignOut}
+            className="w-full text-error font-bold bg-error-container/30 rounded-full px-4 py-4 hover:bg-error-container/50 transition-colors active:scale-95"
+          >
+            Cerrar sesion
+          </button>
+        </div>
       </div>
     </main>
   )
 }
 
-function InfoRow({ label, value }: { label: string; value: string }) {
+function InfoRow({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
-    <div className="flex justify-between items-center">
-      <span className="text-sm text-primary/40">{label}</span>
-      <span className="font-semibold text-primary text-sm">{value}</span>
+    <div className="flex items-center gap-3">
+      <span className="material-symbols-outlined text-on-surface-variant text-xl w-6">{icon}</span>
+      <span className="text-sm text-on-surface-variant flex-1">{label}</span>
+      <span className="font-semibold text-on-surface text-sm">{value}</span>
     </div>
   )
 }
@@ -145,31 +151,23 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 function VerificationBadge({ status }: { status: string }) {
   if (status === 'verified') {
     return (
-      <span className="flex items-center gap-1.5 text-xs font-semibold text-secondary bg-accent/40 px-2.5 py-0.5 rounded-full">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
+      <span className="flex items-center gap-1.5 text-xs font-bold text-on-secondary-container bg-secondary-container px-3 py-1 rounded-full">
+        <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
         Verificado
       </span>
     )
   }
   if (status === 'pending') {
     return (
-      <span className="flex items-center gap-1.5 text-xs font-semibold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12 6 12 12 16 14" />
-        </svg>
+      <span className="flex items-center gap-1.5 text-xs font-bold text-on-tertiary-fixed-variant bg-tertiary-fixed px-3 py-1 rounded-full">
+        <span className="material-symbols-outlined text-sm">schedule</span>
         Pendiente
       </span>
     )
   }
   return (
-    <span className="flex items-center gap-1.5 text-xs font-semibold text-danger bg-danger-light px-2.5 py-0.5 rounded-full">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="18" y1="6" x2="6" y2="18" />
-        <line x1="6" y1="6" x2="18" y2="18" />
-      </svg>
+    <span className="flex items-center gap-1.5 text-xs font-bold text-error bg-error-container px-3 py-1 rounded-full">
+      <span className="material-symbols-outlined text-sm">cancel</span>
       Rechazado
     </span>
   )
