@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#162459" />
+  <title>Vecindad — Sin conexion</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: #FCF9F1;
+      color: #1c1c17;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+    .icon {
+      width: 80px;
+      height: 80px;
+      background: #f6f3eb;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+    }
+    h1 {
+      color: #162459;
+      font-size: 1.875rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.025em;
+    }
+    p {
+      color: #45464f;
+      margin-bottom: 2rem;
+      max-width: 320px;
+      line-height: 1.6;
+    }
+    button {
+      background: linear-gradient(135deg, #162459 0%, #2e3b70 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2.5rem;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    button:active { transform: scale(0.95); }
+  </style>
+</head>
+<body>
+  <div class="icon">📡</div>
+  <h1>Sin conexion</h1>
+  <p>Parece que no tenes internet. Conectate y volve a intentar para explorar tu vecindad.</p>
+  <button onclick="window.location.reload()">Reintentar</button>
+</body>
+</html>

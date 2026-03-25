@@ -1,24 +1,70 @@
 {
-  "name": "Vecindad",
+  "name": "Vecindad — Marketplace de tu barrio",
   "short_name": "Vecindad",
-  "description": "El marketplace de tu barrio. Solo vecinos verificados.",
-  "start_url": "/",
+  "description": "El marketplace de tu barrio. Solo vecinos verificados de Nordelta.",
+  "start_url": "/feed",
   "display": "standalone",
   "background_color": "#FCF9F1",
   "theme_color": "#162459",
   "orientation": "portrait",
+  "scope": "/",
+  "categories": ["shopping", "social"],
   "icons": [
+    {
+      "src": "/icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
     {
       "src": "/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png"
     },
     {
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Explorar",
+      "short_name": "Feed",
+      "url": "/feed",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Publicar",
+      "short_name": "Publicar",
+      "url": "/publish",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
     }
   ]
 }
