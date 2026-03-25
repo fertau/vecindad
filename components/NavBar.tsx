@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 
 export default function NavBar() {
-  const { user, loading, needsRegistration } = useAuth()
+  const { user, loading, needsRegistration, isAdmin } = useAuth()
   const pathname = usePathname()
 
   const isLoggedIn = !loading && user && !needsRegistration
@@ -60,6 +60,18 @@ export default function NavBar() {
                 }`}
               >
                 Mi Perfil
+              </Link>
+            )}
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className={`text-sm uppercase tracking-wider font-semibold transition-colors px-3 py-1 rounded-full ${
+                  pathname === '/admin'
+                    ? 'text-primary'
+                    : 'text-on-surface-variant hover:bg-surface-container-highest'
+                }`}
+              >
+                Admin
               </Link>
             )}
             {isGuest && (
