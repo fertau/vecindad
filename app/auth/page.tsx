@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Timestamp } from 'firebase/firestore'
 import { useAuth } from '@/hooks/useAuth'
 import { signInWithGoogle } from '@/lib/auth'
-import { createUser } from '@/lib/firestore'
+import { createUser, acceptInvite } from '@/lib/firestore'
 import { recomputeTrustFields } from '@/lib/trust'
 import { trackEvent, identifyUser } from '@/lib/analytics'
 import { NEIGHBORHOOD_LABELS, NEIGHBORHOODS_SORTED } from '@/constants/neighborhoods'
@@ -13,6 +13,8 @@ import { User, Neighborhood, Verification } from '@/types'
 
 export default function AuthPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const inviteToken = searchParams.get('invite')
   const { user, firebaseUser, loading, needsRegistration, refreshUser } = useAuth()
 
   const [name, setName] = useState('')
@@ -92,8 +94,18 @@ export default function AuthPage() {
       trackEvent('oauth_connected', { provider: 'google' })
       identifyUser(firebaseUser.uid, { name: newUser.name, neighborhood, trustLevel })
 
+      // Auto-accept invite if came from invite link
+      if (inviteToken) {
+        try {
+          await acceptInvite(inviteToken, firebaseUser.uid)
+          trackEvent('invite_accepted', { token: inviteToken, acceptedByUid: firebaseUser.uid })
+        } catch (err) {
+          console.error('Error accepting invite:', err)
+        }
+      }
+
       await refreshUser()
-      router.push('/')
+      router.push(inviteToken ? `/invite/${inviteToken}` : '/')
     } catch (err) {
       console.error('Registration error:', err)
       setError('Error al registrar. Intenta de nuevo.')

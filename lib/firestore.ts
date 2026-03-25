@@ -226,9 +226,82 @@ export async function vouchForUser(from: User, toUid: string, note?: string): Pr
 // ─── Invites ────────────────────────────────────────────────────────────────
 
 export async function getInvite(token: string): Promise<Invite | null> {
-  throw new Error('Not implemented')
+  const docSnap = await getDoc(doc(db, 'invites', token))
+  if (!docSnap.exists()) return null
+  return { id: docSnap.id, ...docSnap.data() } as Invite
 }
 
 export async function getInvitesByUser(uid: string): Promise<Invite[]> {
-  throw new Error('Not implemented')
+  const q = query(
+    collection(db, 'invites'),
+    where('inviterUid', '==', uid),
+    orderBy('createdAt', 'desc')
+  )
+  const snapshot = await getDocs(q)
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }) as Invite)
+}
+
+export async function createInvite(inviter: User): Promise<string> {
+  const token = crypto.randomUUID()
+  const now = Timestamp.now()
+  const expiresAt = Timestamp.fromMillis(now.toMillis() + 48 * 60 * 60 * 1000)
+
+  const invite: Invite = {
+    id: token,
+    type: 'open_single_use',
+    inviterUid: inviter.uid,
+    inviterName: inviter.name,
+    status: 'pending',
+    createdAt: now,
+    expiresAt,
+  }
+
+  await setDoc(doc(db, 'invites', token), invite)
+  return token
+}
+
+export async function acceptInvite(token: string, acceptedByUid: string): Promise<void> {
+  const invite = await getInvite(token)
+  if (!invite) throw new Error('Invite not found')
+  if (invite.status !== 'pending') throw new Error('Invite already used')
+  if (invite.expiresAt.toMillis() < Date.now()) throw new Error('Invite expired')
+
+  const batch = writeBatch(db)
+  const now = Timestamp.now()
+
+  // 1. Mark invite as accepted
+  batch.update(doc(db, 'invites', token), {
+    status: 'accepted',
+    acceptedBy: acceptedByUid,
+    acceptedAt: now,
+  })
+
+  // 2. Set referredBy on the new user
+  batch.update(doc(db, 'users', acceptedByUid), {
+    referredBy: invite.inviterUid,
+    updatedAt: serverTimestamp(),
+  })
+
+  // 3. Create bidirectional social edges (direct_invite_open)
+  const edgeARef = doc(collection(db, 'socialEdges'))
+  batch.set(edgeARef, {
+    id: edgeARef.id,
+    fromUid: invite.inviterUid,
+    toUid: acceptedByUid,
+    source: 'direct_invite_open',
+    weight: EDGE_WEIGHTS.direct_invite_open,
+    createdAt: now,
+  })
+
+  const edgeBRef = doc(collection(db, 'socialEdges'))
+  batch.set(edgeBRef, {
+    id: edgeBRef.id,
+    fromUid: acceptedByUid,
+    toUid: invite.inviterUid,
+    source: 'direct_invite_open',
+    weight: EDGE_WEIGHTS.direct_invite_open,
+    createdAt: now,
+  })
+
+  await batch.commit()
 }

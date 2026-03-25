@@ -2,8 +2,10 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useAuth } from '@/hooks/useAuth'
 import { signOut } from '@/lib/auth'
+import { canInvite } from '@/lib/trust'
 import { NEIGHBORHOOD_LABELS } from '@/constants/neighborhoods'
 import { TrustLevel, VerificationMethod } from '@/types'
 
@@ -124,6 +126,17 @@ export default function ProfilePage() {
               ))}
             </div>
           </div>
+
+          {/* Invite button */}
+          {canInvite(user) && (
+            <Link
+              href="/invite"
+              className="w-full bg-signature-gradient text-white py-4 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:shadow-xl transition-all active:scale-95"
+            >
+              <span className="material-symbols-outlined">person_add</span>
+              Invitar vecinos
+            </Link>
+          )}
 
           {/* Sign out */}
           <button
