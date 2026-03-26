@@ -68,12 +68,12 @@ export default function HomePage() {
                   park
                 </span>
               </div>
-              <div className="absolute bottom-6 left-6 bg-surface-bright/80 backdrop-blur-xl p-4 rounded-xl shadow-lg max-w-[200px]">
+              <div className="absolute bottom-6 left-6 bg-surface-bright/80 backdrop-blur-xl p-4 rounded-xl shadow-lg max-w-[220px]">
                 <p className="text-xs font-bold text-primary-container uppercase tracking-widest mb-1">
-                  Ultima actividad
+                  Comunidad activa
                 </p>
                 <p className="text-sm font-medium">
-                  Martin de la calle 4 vendio una bicicleta hoy
+                  12 vecinos encontraron lo que buscaban esta semana
                 </p>
               </div>
             </div>
@@ -150,9 +150,7 @@ export default function HomePage() {
             {/* Item 1: Wide — Bicicleta */}
             <div className="md:col-span-2 bg-surface-container-lowest rounded-3xl p-4 flex flex-col group overflow-hidden">
               <div className="relative h-64 md:h-full overflow-hidden rounded-2xl bg-surface-container-low">
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="material-symbols-outlined text-[80px] text-outline-variant/30">pedal_bike</span>
-                </div>
+                <img src="https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?w=800&h=600&fit=crop" alt="Bicicleta" className="w-full h-full object-cover" />
                 <div className="absolute top-4 left-4">
                   <span className="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
                     Ayer
@@ -207,8 +205,8 @@ export default function HomePage() {
 
             {/* Item 3: Square — Torta */}
             <div className="bg-surface-container-lowest rounded-3xl p-4 flex flex-col">
-              <div className="relative aspect-square overflow-hidden rounded-2xl mb-4 bg-surface-container-low flex items-center justify-center">
-                <span className="material-symbols-outlined text-[60px] text-outline-variant/30">cake</span>
+              <div className="relative aspect-square overflow-hidden rounded-2xl mb-4 bg-surface-container-low">
+                <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop" alt="Torta casera" className="w-full h-full object-cover" />
               </div>
               <h3 className="font-bold text-primary">Torta casera para eventos</h3>
               <p className="text-xs text-on-surface-variant mt-1">Por Laura B. (Barrio El Golf)</p>
@@ -237,8 +235,8 @@ export default function HomePage() {
 
             {/* Item 5: Small Square — Reparacion */}
             <div className="bg-surface-container-lowest rounded-3xl p-4 flex flex-col">
-              <div className="bg-tertiary-fixed h-32 rounded-2xl mb-4 flex items-center justify-center">
-                <span className="material-symbols-outlined text-tertiary text-4xl">handyman</span>
+              <div className="h-32 rounded-2xl mb-4 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=400&h=300&fit=crop" alt="Reparacion de PCs" className="w-full h-full object-cover" />
               </div>
               <h3 className="font-bold text-primary">Reparacion de PCs</h3>
               <p className="text-xs text-on-surface-variant mt-1">

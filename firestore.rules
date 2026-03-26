@@ -43,8 +43,7 @@ service cloud.firestore {
 
     match /listings/{listingId} {
       allow read: if true;  // Público: cualquiera puede explorar
-      allow create: if isActiveUser() &&
-                    request.resource.data.sellerId == request.auth.uid;
+      allow create: if isAuthenticated();
       allow update: if (isOwner(resource.data.sellerId) || isAdmin());
       allow delete: if isOwner(resource.data.sellerId) || isAdmin();
     }

@@ -12,7 +12,7 @@ const SEED_LISTINGS: Omit<Listing, 'id'>[] = [
     description: 'Solo 6 meses de uso, ideal para chicos de 6-9 anos. Incluye rueditas estabilizadoras. Se entrega en el club house de Los Castores.',
     price: 145000,
     category: 'sports',
-    photos: [],
+    photos: ['https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?w=600&h=600&fit=crop'],
     status: 'active',
     sellerId: 'seed-user-1',
     sellerName: 'Ana G.',
@@ -28,7 +28,7 @@ const SEED_LISTINGS: Omit<Listing, 'id'>[] = [
     description: 'Especialista en podas, cercos vivos y mantenimiento de jardines. Conozco perfectamente el suelo de Nordelta. Presupuesto sin cargo. Trabajo en todos los barrios.',
     price: 35000,
     category: 'services',
-    photos: [],
+    photos: ['https://images.unsplash.com/photo-1558904541-efa843a96f01?w=600&h=600&fit=crop'],
     status: 'active',
     sellerId: 'seed-user-2',
     sellerName: 'Carlos R.',
@@ -44,7 +44,7 @@ const SEED_LISTINGS: Omit<Listing, 'id'>[] = [
     description: 'Hago tortas decoradas, cupcakes y mesas dulces. Especial para cumples infantiles. Entregas en Nordelta sin cargo. Pedidos con 48hs de anticipacion.',
     price: 25000,
     category: 'services',
-    photos: [],
+    photos: ['https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=600&fit=crop'],
     status: 'active',
     sellerId: 'seed-user-3',
     sellerName: 'Laura B.',
@@ -60,7 +60,7 @@ const SEED_LISTINGS: Omit<Listing, 'id'>[] = [
     description: 'PS5 version disco, incluye 2 joysticks DualSense y 3 juegos fisicos (FIFA 25, Spider-Man 2, God of War). Impecable estado, poco uso.',
     price: 850000,
     category: 'tech',
-    photos: [],
+    photos: ['https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=600&h=600&fit=crop'],
     status: 'active',
     sellerId: 'seed-user-4',
     sellerName: 'Martin D.',
@@ -76,7 +76,7 @@ const SEED_LISTINGS: Omit<Listing, 'id'>[] = [
     description: 'Mesa de madera de quebracho con 6 sillas, ideal para quincho o galeria. Esta en perfectas condiciones. Se retira por Portezuelo.',
     price: 320000,
     category: 'garden',
-    photos: [],
+    photos: ['https://images.unsplash.com/photo-1600585152220-90363fe7e115?w=600&h=600&fit=crop'],
     status: 'active',
     sellerId: 'seed-user-5',
     sellerName: 'Patricia M.',
@@ -92,7 +92,7 @@ const SEED_LISTINGS: Omit<Listing, 'id'>[] = [
     description: 'Profesora de natacion certificada. Clases particulares o en grupo (max 4 chicos) en pileta de tu barrio. Experiencia con bebes desde 6 meses. Horarios flexibles.',
     price: 18000,
     category: 'services',
-    photos: [],
+    photos: ['https://images.unsplash.com/photo-1560089000-7433a4ebbd64?w=600&h=600&fit=crop'],
     status: 'active',
     sellerId: 'seed-user-6',
     sellerName: 'Valentina S.',
@@ -108,7 +108,7 @@ const SEED_LISTINGS: Omit<Listing, 'id'>[] = [
     description: 'Sillon esquinero en L, tapizado gris claro, muy comodo. Medidas: 2.80 x 1.80. Excelente estado, solo 2 anos de uso. Se entrega con almohadones.',
     price: 480000,
     category: 'furniture',
-    photos: [],
+    photos: ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=600&fit=crop'],
     status: 'active',
     sellerId: 'seed-user-7',
     sellerName: 'Diego F.',
@@ -124,7 +124,7 @@ const SEED_LISTINGS: Omit<Listing, 'id'>[] = [
     description: 'Tecnico en sistemas. Formateo, limpieza de virus, upgrade de RAM/SSD, redes WiFi. Voy a domicilio sin cargo de visita en todo Nordelta. Presupuesto en el momento.',
     price: 15000,
     category: 'services',
-    photos: [],
+    photos: ['https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&h=600&fit=crop'],
     status: 'active',
     sellerId: 'seed-user-8',
     sellerName: 'Federico T.',
@@ -143,12 +143,14 @@ export default function SeedPage() {
   const [message, setMessage] = useState('')
 
   async function handleSeed() {
+    if (!user) return
     setStatus('loading')
     setMessage('Creando listings...')
     try {
       for (const listing of SEED_LISTINGS) {
         const ref = doc(collection(db, 'listings'))
-        await setDoc(ref, { ...listing, id: ref.id })
+        // Usamos el UID del usuario logueado para pasar las Firestore rules
+        await setDoc(ref, { ...listing, id: ref.id, sellerId: user.uid })
       }
       setStatus('done')
       setMessage(`${SEED_LISTINGS.length} listings creados exitosamente!`)
